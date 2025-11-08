@@ -6,37 +6,39 @@
  * LICENSE: MIT
  */
 
-export type URI = string; // in JSON schema this should be a validated string
-
 /** =====================
  *  Common Primitive Aliases
  *  ===================== */
+
+export type URI = string; // in JSON schema this should be a validated string
+
+/**
+ * An item which allows flexible and descriptive values.
+ */
+export interface PropertyValue {
+  type: "PropertyValue";
+
+  propertyId: string;
+
+  value: any;
+}
 
 /** =====================
  *  MediaObject
  *  ===================== */
 export type MediaObject = Record<string, unknown> & {
+  type: "MediaObject"
+
   /** Actual bytes of the media object, e.g., the image or video file. */
   contentUri: URI;
 }
 
 /** =====================
- *  Identifier / OrganizationIdentifier
- *  ===================== */
-export type Identifier = PropertyValue & {}
-
-export type OrganizationIdentifier =
-    | ISO6523Code
-    | Ringgold
-    | ResearchOrganizationRegistry
-    | EIN
-    | CaliforniaCorporationNumber
-    | PropertyValue;
-
-/** =====================
  *  Organization
  *  ===================== */
 export type Organization = Record<string, unknown> & {
+  type: "Organization"
+
   /** Physical address of the item. */
   address?: PostalAddress;
 
@@ -44,13 +46,13 @@ export type Organization = Record<string, unknown> & {
   uris?: URI[]
 
   /** The name of the organization. */
-  name: Text;
+  name: string;
 
   /** Contact emails. */
-  emails?: Email[];
+  emails?: string[]; // In JSON-schema this should be of format "email".
 
   /** Identifiers for the organization. */
-  identifiers: OrganizationIdentifier[];
+  identifiers: PropertyValue[];
 
   /** Parent organizations (supersedes branchOf). */
   parentOrganizations?: Organization[];
@@ -69,6 +71,8 @@ export type Organization = Record<string, unknown> & {
  *  Author and AuthorCRediT
  *  ===================== */
 export type Author = Record<string, unknown> & {
+  type: "Author"
+
   /** The creator of an item. */
   author: Organization | Person;
 
@@ -100,8 +104,10 @@ export enum AuthorCRediT {
  *  Person
  *  ===================== */
 export type Person = Record<string, unknown> & {
+  type: "Person"
+
   /** Identifiers for a person. */
-  identifiers?: PersonIdentifier[];
+  identifiers?: PropertyValue[];
 
   /** Affiliations. */
   affiliations?: Affiliation[];
@@ -120,6 +126,8 @@ export type Person = Record<string, unknown> & {
  * The affiliation between people and organziations.
  */
 export type Affiliation = Record<string, unknown> & {
+  type: "Affiliation"
+
   /** The Organization or Person itself. */
   affiliate: Organization | Person;
 
@@ -137,6 +145,8 @@ export type Affiliation = Record<string, unknown> & {
  * The name of a Person object.
  */
 export type PersonName = Record<string, unknown> & {
+  type: "PersonName"
+
   /** Family name. In the U.S., the last name of a Person. */
   familyNames: string[];
 
@@ -154,6 +164,8 @@ export type PersonName = Record<string, unknown> & {
  *  Grant
  *  ===================== */
 export type Grant = Record<string, unknown> & {
+  type: "Grant";
+
   /** Ways to identify the grant. */
   identifiers?: PropertyValue[];
 
@@ -177,6 +189,8 @@ export type Grant = Record<string, unknown> & {
  *  MonetaryAmount
  *  ===================== */
 export type MonetaryAmount = Record<string, unknown> & {
+  type: "MonetaryAmount";
+
   /** Currency, e.g., USD, BTC, etc. */
   currency: string;
 
@@ -187,15 +201,9 @@ export type MonetaryAmount = Record<string, unknown> & {
 /** =====================
  *  Placeholder Types (referenced but not defined in YAML)
  *  ===================== */
-export interface PropertyValue { [key: string]: any; }
-export interface ISO6523Code { [key: string]: any; }
-export interface Ringgold { [key: string]: any; }
-export interface ResearchOrganizationRegistry { [key: string]: any; }
-export interface EIN { [key: string]: any; }
-export interface CaliforniaCorporationNumber { [key: string]: any; }
+
+
 export interface PostalAddress { [key: string]: any; }
-export interface Email { [key: string]: any; }
-export interface PersonIdentifier { [key: string]: any; }
 export interface ScholarlyWork { [key: string]: any; }
 export interface Event { [key: string]: any; }
 export interface Product { [key: string]: any; }
