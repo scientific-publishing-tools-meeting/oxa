@@ -161,19 +161,16 @@ export type PersonName = Record<string, unknown> & {
 }
 
 /** =====================
- *  Grant
+ *  Funding information block.
  *  ===================== */
-export type Grant = Record<string, unknown> & {
-  type: "Grant";
+/**
+ * The source of funding for a scholarly work.
+ */
+export type FundingSource = Record<string, unknown> & {
+  type: "FundingSource"
 
   /** Ways to identify the grant. */
   identifiers?: PropertyValue[];
-
-  /**
-   * Something funded or sponsored through a Grant.
-   * (inverse: funding)
-   */
-  fundedItem: ScholarlyWork | Person | Organization | Event | Product;
 
   /** The person or organization funding. */
   funder: Person | Organization;
@@ -183,6 +180,18 @@ export type Grant = Record<string, unknown> & {
 
   /** Description of what the funding contributed towards. */
   description?: string;
+}
+
+/**
+ * The way to connect a funding source to its funded item.
+ */
+export type Grant = FundingSource & {
+  type: "Grant";
+
+  /**
+   * Something funded or sponsored through a Grant.
+   */
+  fundedItem: ScholarlyWork | Person | Organization | Event | Product;
 }
 
 /** =====================
