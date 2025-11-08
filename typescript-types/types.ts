@@ -6,9 +6,206 @@
  * LICENSE: MIT
  */
 
-export type Author = Record<string, unknown> & {};
-
 export type URI = string; // in JSON schema this should be a validated string
+
+/** =====================
+ *  Common Primitive Aliases
+ *  ===================== */
+type URL = string;
+type PositiveInteger = number;
+
+/** =====================
+ *  MediaObject
+ *  ===================== */
+export type MediaObject = Record<string, unknown> & {
+  /** The bitrate of the media object. */
+  bitrate?: number;
+
+  /** File size in (mega/kilo)bytes. */
+  contentSize: number;
+
+  /** Actual bytes of the media object, e.g., the image or video file. */
+  contentUrl?: URL;
+
+  /**
+   * Media type (MIME format, IANA/MDN ref). E.g., application/zip, audio/mpeg.
+   * Can also be a URL describing the format.
+   */
+  encodingFormat?: Text | URL;
+
+  /** Height of the item. */
+  height?: number;
+
+  /** Width of the item. */
+  width?: number;
+
+  /** Upload date. */
+  uploadDate: string; // ISO date or date-time
+}
+
+/** =====================
+ *  Identifier / OrganizationIdentifier
+ *  ===================== */
+export type Identifier = PropertyValue & {}
+
+export type OrganizationIdentifier =
+    | ISO6523Code
+    | Ringgold
+    | ResearchOrganizationRegistry
+    | EIN
+    | CaliforniaCorporationNumber
+    | PropertyValue;
+
+/** =====================
+ *  Organization
+ *  ===================== */
+export type Organization = Record<string, unknown> & {
+  /** Physical address of the item. */
+  address?: PostalAddress;
+
+  /** The name of the organization. */
+  name: Text;
+
+  /** Contact emails. */
+  emails?: Email[];
+
+  /** Identifiers for the organization. */
+  identifiers: OrganizationIdentifier[];
+
+  /** Parent organizations (supersedes branchOf). */
+  parentOrganizations?: Organization[];
+
+  /** An Organization to which this Organization belongs. */
+  memberOf?: Organization[];
+
+  /** Members (Persons or Organizations). */
+  members?: Organization[];
+
+  /** Sub-organizations (inverse of parentOrganizations). */
+  subOrganization?: Organization[];
+}
+
+/** =====================
+ *  Author and AuthorCRediT
+ *  ===================== */
+export type Author = Record<string, unknown> & {
+  /** The creator of an item. */
+  author: Organization | Person;
+
+  /** Description of how a user contributed. */
+  contributorRoles: (PropertyValue | AuthorCRediT)[];
+
+  /** Order of appearance (tie-break by family name). */
+  order?: PositiveInteger;
+}
+
+export enum AuthorCRediT {
+  Conceptualization = "Conceptualization",
+  Methodology = "Methodology",
+  Software = "Software",
+  Validation = "Validation",
+  FormalAnalysis = "Formal analysis",
+  Investigation = "Investigation",
+  Resources = "Resources",
+  DataCuration = "Data Curation",
+  WritingOriginalDraft = "Writing - Original Draft",
+  WritingReviewEditing = "Writing - Review & Editing",
+  Visualization = "Visualization",
+  Supervision = "Supervision",
+  ProjectAdministration = "Project administration",
+  FundingAcquisition = "Funding acquisition",
+}
+
+/** =====================
+ *  Person
+ *  ===================== */
+export type Person = Record<string, unknown> & {
+  /** Identifiers for a person. */
+  identifiers?: PersonIdentifier[];
+
+  /** Affiliations. */
+  affiliations?: Affiliation[];
+
+  /** Emails. */
+  emails?: string[];
+
+  /** Names the author is known by. */
+  names: PersonName[];
+
+  /** Physical address. */
+  address?: PostalAddress;
+
+  /** Known languages (IETF BCP 47 codes). */
+  knowsLanguage?: Language;
+}
+export type Affiliation = Record<string, unknown> & {
+  affiliate: Organization | Person;
+  dateStart: string; // date or date-time
+  dateEnd?: string;  // date or date-time
+  affiliationType: string;
+}
+
+export type PersonName = Record<string, unknown> & {
+  familyNames?: string[];
+  givenNames?: string[];
+  honorificPrefixes?: string[];
+  honorificSuffixes?: string[];
+  order?: number;
+}
+
+/** =====================
+ *  Grant
+ *  ===================== */
+export type Grant = Record<string, unknown> & {
+  /** Ways to identify the grant. */
+  identifiers: PropertyValue[];
+
+  /**
+   * Something funded or sponsored through a Grant.
+   * (inverse: funding)
+   */
+  fundedItem: ScholarlyWork | Person | Organization | Event | Product;
+
+  /** The person or organization funding. */
+  funder: Person | Organization;
+
+  /** The monetary or non-monetary contribution. */
+  funding: MonetaryAmount | Product | Service;
+
+  /** Description of what the funding contributed towards. */
+  description?: Text;
+}
+
+/** =====================
+ *  MonetaryAmount
+ *  ===================== */
+export type MonetaryAmount = Record<string, unknown> & {
+  /** Currency, e.g., USD, BTC, etc. */
+  currency: Text;
+
+  /** The value of the monetary amount. */
+  value: number | StructuredValue;
+}
+
+/** =====================
+ *  Placeholder Types (referenced but not defined in YAML)
+ *  ===================== */
+export interface PropertyValue { [key: string]: any; }
+export interface ISO6523Code { [key: string]: any; }
+export interface Ringgold { [key: string]: any; }
+export interface ResearchOrganizationRegistry { [key: string]: any; }
+export interface EIN { [key: string]: any; }
+export interface CaliforniaCorporationNumber { [key: string]: any; }
+export interface PostalAddress { [key: string]: any; }
+export interface Email { [key: string]: any; }
+export interface PersonIdentifier { [key: string]: any; }
+export interface Language { [key: string]: any; }
+export interface ScholarlyWork { [key: string]: any; }
+export interface Event { [key: string]: any; }
+export interface Product { [key: string]: any; }
+export interface Service { [key: string]: any; }
+export interface StructuredValue { [key: string]: any; }
+
 
 export type License = {
   uri?: URI; // link to full version of license if short name provided
