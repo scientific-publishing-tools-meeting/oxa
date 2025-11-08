@@ -11,36 +11,13 @@ export type URI = string; // in JSON schema this should be a validated string
 /** =====================
  *  Common Primitive Aliases
  *  ===================== */
-type URL = string;
-type PositiveInteger = number;
 
 /** =====================
  *  MediaObject
  *  ===================== */
 export type MediaObject = Record<string, unknown> & {
-  /** The bitrate of the media object. */
-  bitrate?: number;
-
-  /** File size in (mega/kilo)bytes. */
-  contentSize: number;
-
   /** Actual bytes of the media object, e.g., the image or video file. */
-  contentUrl?: URL;
-
-  /**
-   * Media type (MIME format, IANA/MDN ref). E.g., application/zip, audio/mpeg.
-   * Can also be a URL describing the format.
-   */
-  encodingFormat?: Text | URL;
-
-  /** Height of the item. */
-  height?: number;
-
-  /** Width of the item. */
-  width?: number;
-
-  /** Upload date. */
-  uploadDate: string; // ISO date or date-time
+  contentUri: URI;
 }
 
 /** =====================
@@ -63,6 +40,9 @@ export type Organization = Record<string, unknown> & {
   /** Physical address of the item. */
   address?: PostalAddress;
 
+  /** The URI(s) associated with this organization. */
+  uris?: URI[]
+
   /** The name of the organization. */
   name: Text;
 
@@ -79,7 +59,7 @@ export type Organization = Record<string, unknown> & {
   memberOf?: Organization[];
 
   /** Members (Persons or Organizations). */
-  members?: Organization[];
+  members?: (Person | Organization)[];
 
   /** Sub-organizations (inverse of parentOrganizations). */
   subOrganization?: Organization[];
@@ -96,7 +76,7 @@ export type Author = Record<string, unknown> & {
   contributorRoles: (PropertyValue | AuthorCRediT)[];
 
   /** Order of appearance (tie-break by family name). */
-  order?: PositiveInteger;
+  order?: number; // In JSON-schema this should have a minimum of 0.
 }
 
 export enum AuthorCRediT {
@@ -127,30 +107,47 @@ export type Person = Record<string, unknown> & {
   affiliations?: Affiliation[];
 
   /** Emails. */
-  emails?: string[];
+  emails?: string[]; // In JSON-schema this should have a format of email.
 
   /** Names the author is known by. */
   names: PersonName[];
 
   /** Physical address. */
   address?: PostalAddress;
-
-  /** Known languages (IETF BCP 47 codes). */
-  knowsLanguage?: Language;
 }
+
+/**
+ * The affiliation between people and organziations.
+ */
 export type Affiliation = Record<string, unknown> & {
+  /** The Organization or Person itself. */
   affiliate: Organization | Person;
+
+  /** The date the affiliation to this item began. */
   dateStart: string; // in JSON-schema this should be format date or date-time
+
+  /** The date the affiliation to this item ended. Leave blank to indicate the affiliation is current. */
   dateEnd?: string;  // in JSON-schema this should be format date or date-time
+
+  /** Describe the relationship to the item. */
   affiliationType: string; // in JSON-schema this should have the description, "Describe the relationship to the item."
 }
 
+/**
+ * The name of a Person object.
+ */
 export type PersonName = Record<string, unknown> & {
+  /** Family name. In the U.S., the last name of a Person. */
   familyNames: string[];
+
+  /** Given name. In the U.S., the first name of a Person. */
   givenNames?: string[];
+
+  /** An honorific prefix preceding a Person's name such as Dr/Mrs/Mr. */
   honorificPrefixes?: string[];
+
+  /** An honorific suffix following a Person's name such as M.D./PhD/MSCSW. */
   honorificSuffixes?: string[];
-  order: number;
 }
 
 /** =====================
@@ -158,7 +155,7 @@ export type PersonName = Record<string, unknown> & {
  *  ===================== */
 export type Grant = Record<string, unknown> & {
   /** Ways to identify the grant. */
-  identifiers: PropertyValue[];
+  identifiers?: PropertyValue[];
 
   /**
    * Something funded or sponsored through a Grant.
@@ -181,10 +178,10 @@ export type Grant = Record<string, unknown> & {
  *  ===================== */
 export type MonetaryAmount = Record<string, unknown> & {
   /** Currency, e.g., USD, BTC, etc. */
-  currency: Text;
+  currency: string;
 
   /** The value of the monetary amount. */
-  value: number | StructuredValue;
+  value: number;
 }
 
 /** =====================
@@ -199,12 +196,10 @@ export interface CaliforniaCorporationNumber { [key: string]: any; }
 export interface PostalAddress { [key: string]: any; }
 export interface Email { [key: string]: any; }
 export interface PersonIdentifier { [key: string]: any; }
-export interface Language { [key: string]: any; }
 export interface ScholarlyWork { [key: string]: any; }
 export interface Event { [key: string]: any; }
 export interface Product { [key: string]: any; }
 export interface Service { [key: string]: any; }
-export interface StructuredValue { [key: string]: any; }
 
 
 export type License = {
