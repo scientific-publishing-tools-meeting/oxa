@@ -132,7 +132,7 @@ export type Affiliation = Record<string, unknown> & {
   affiliate: Organization | Person;
 
   /** The date the affiliation to this item began. */
-  dateStart: string; // in JSON-schema this should be format date or date-time
+  dateStart?: string; // in JSON-schema this should be format date or date-time
 
   /** The date the affiliation to this item ended. Leave blank to indicate the affiliation is current. */
   dateEnd?: string;  // in JSON-schema this should be format date or date-time
