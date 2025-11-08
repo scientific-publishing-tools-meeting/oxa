@@ -1,4 +1,4 @@
-# Open eXchance Architecture
+# OXA Links
 
 ## Motivation
 
