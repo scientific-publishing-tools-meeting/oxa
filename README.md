@@ -1,9 +1,9 @@
+<p align="center"><img src="logo.png" height="150px" /></p>
+
 # OXA — The Open Exchange Architecture
 
 > **A foundation for interoperable, structured scientific content.**
 > OXA defines open, extensible JSON schemas that describe scientific documents — bridging the gap between authoring systems like **Stencila**, **MyST**, **Quarto** and the scientific publishing ecosystem which uses tools like **JATS**.
-
-<img src="logo.png" height="150px" />
 
 ## Overview
 
