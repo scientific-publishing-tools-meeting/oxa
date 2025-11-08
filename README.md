@@ -3,7 +3,7 @@
 # OXA — The Open Exchange Architecture
 
 > **A foundation for interoperable, structured scientific content.**
-> OXA defines open, extensible JSON schemas that describe scientific documents — bridging the gap between authoring systems like **Stencila**, **MyST**, **Quarto** and the scientific publishing ecosystem which uses tools like **JATS**.
+> OXA defines open, extensible JSON schemas that describe modular and composable scientific documents — bridging the gap between authoring systems like **Stencila**, **MyST**, **Quarto** and the scientific publishing ecosystem which uses tools like **JATS**.
 
 ## Overview
 
@@ -28,6 +28,19 @@ The format is inspired by **[unified.js](https://unifiedjs.com)** and **Pandoc A
 - **Extensible:** Add new node types while preserving schema validation.
 - **Typed & linked:** Everything has a clear `type`, optional `id`, and structured `data` field.
 - **Modular**: Documents and components can link across projects, enabling rich cross-references, citations, and reuse of figures, data, or methods from distributed sources.
+- **Computational**: Build in the schemas for computational scientific content (e.g. Notebooks)
+
+## Supporters
+
+OXA stands on the shoulders of open projects that make interoperability in science possible.
+
+- [**openRxiv**](https://openrxiv.org) — building open infrastructures for federated preprints and modular scientific publishing.
+- [**Stencila**](https://stenci.la) — open tools for executable documents, bridging computation and publishing.
+- [**Continuous Science Foundation**](https://csf.now) — advancing a movement toward continuous, connected, and transparent research communication.
+- [**Curvenote**](https://curvenote.com) — scientific content management and publishing infrastructure built on MyST and open standards.
+- [**Project Jupyter — MyST-MD**](https://mystmd.org) — extending Markdown for executable, richly structured scientific content.
+- [**Posit (Quarto)**](https://quarto.org) — an open-source publishing system for scientific and technical communication, supporting reproducible research and interoperability.
+- [**Creative Commons**](https://creativecommons.org) — defining open licenses and rights frameworks that make scientific reuse possible.
 
 ## Core Concepts
 
@@ -167,20 +180,20 @@ children:
 Schemas are defined in JSON Schema Draft-07 and validated using standard tools:
 
 ```bash
-npm install ajv-cli -g
-ajv validate -s schema/oxa-types.json -d examples/document.json
+npm install oxa -g
+oxa validate -d examples/document.json
 ```
 
 Or in Python:
 
-```python
-from jsonschema import validate
-import json
-
-schema = json.load(open("schema/oxa-types.json"))
-doc = json.load(open("examples/document.json"))
-validate(instance=doc, schema=schema)
+```bash
+pip install oxa
+oxa validate -d examples/document.json
 ```
+
+The schema can be downloaded from oxa.dev.
+
+https://oxa.dev/schemas/0.0.1.json
 
 ## Licensing and Attribution
 
